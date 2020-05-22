@@ -11,8 +11,9 @@
 
     export default {
         async mounted(){
-          const result = await reqFoodCategorys();
-          console.log(result)
+            this.$store.dispatch('getAddress')
+          // const result = await reqFoodCategorys();
+          // console.log(result)
         },
         components: {
             FooterGuide
