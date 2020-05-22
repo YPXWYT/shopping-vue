@@ -1,7 +1,7 @@
 <template>
   <section class="msite">
     <!--首页头部-->
-    <HeaderTop title="昌平区北七家宏福科技园(337省道北)">
+    <HeaderTop :title="address.name">
       <span class="header_search">
             <i class="iconfont icon-sousuo"></i>
       </span>
@@ -132,11 +132,14 @@
 <script>
   import Swiper from 'swiper'
   import 'swiper/css/swiper.min.css'
-
+  import {mapState} from 'vuex'
   import HeaderTop from '../../components/HeaderTop/HeaderTop.vue'
   import ShopList from '../../components/ShopList/ShopList'
 
   export default {
+      computed: {
+          ...mapState(['address'])
+      },
       mounted(){
           // 创建一个Swiper实例对象, 来实现轮播
           new Swiper('.swiper-container', {
