@@ -82,6 +82,7 @@
       },
       mounted(){
           this.$store.dispatch('getCategorys')
+          this.$store.dispatch('getShops')
       },
       watch: {
           categorys (value) { // categorys数组中有数据了, 在异步更新界面之前执行
