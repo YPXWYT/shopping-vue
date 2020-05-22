@@ -2,7 +2,7 @@
   <section class="profile">
     <HeaderTop title="我的"/>
     <section class="profile-number">
-      <a href="javascript:" class="profile-link">
+      <router-link to="/login" class="profile-link">
         <div class="profile_image">
           <i class="iconfont icon-person"></i>
         </div>
@@ -17,8 +17,8 @@
         </div>
         <span class="arrow">
               <i class="iconfont icon-jiantou1"></i>
-            </span>
-      </a>
+        </span>
+      </router-link>
     </section>
     <section class="profile_info_data border-1px">
       <ul class="info_data_list">
@@ -104,6 +104,7 @@
   @import "../../common/stylus/mixins.styl"
   .profile //我的
     width 100%
+    overflow hidden //不让其他组件的滑动状态，转移的当前组件，即隐藏浮动
   .profile-number
     margin-top 45.5px
     .profile-link
