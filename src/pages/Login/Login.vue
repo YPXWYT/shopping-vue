@@ -115,6 +115,7 @@
             },
             // 异步登陆
             async login () {
+                let result
                 // 前台表单验证
                 if(this.loginWay) {  // 短信登陆
                     const {rightPhone, phone, code} = this
@@ -128,6 +129,7 @@
                         return
                     }
                     // 发送ajax请求短信登陆
+                    result = await reqSmsLogin(phone, code)
                 } else {// 密码登陆
                     const {name, pwd, captcha} = this
                     if(!this.name) {
@@ -144,11 +146,27 @@
                         return
                     }
                     // 发送ajax请求密码登陆
+                    result = await reqPwdLogin({name, pwd, captcha})
                 }
-
                 // 停止计时
-
+                if(this.computeTime) {
+                    this.computeTime = 0
+                    clearInterval(this.intervalId)
+                    this.intervalId = undefined
+                }
                 // 根据结果数据处理
+                if(result.code===0) {
+                    const user = result.data
+                    // 将user保存到vuex的state
+                    // 去个人中心界面
+                    this.$router.replace('/profile')
+                } else {
+                    // 显示新的图片验证码
+                    this.getCaptcha()
+                    // 显示警告提示
+                    const msg = result.msg
+                    this.showAlert(msg)
+                }
             },
             // 关闭警告框
             closeTip () {
