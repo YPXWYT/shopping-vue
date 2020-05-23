@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="login_content">
-        <form>
+        <form @submit.prevent="login">
           <div :class="{on: loginWay}">
             <section class="login_message">
               <input type="tel" maxlength="11" placeholder="手机号" v-model="phone">
@@ -19,7 +19,7 @@
               </button>
             </section>
             <section class="login_verification">
-              <input type="tel" maxlength="8" placeholder="验证码">
+              <input type="tel" maxlength="8" placeholder="验证码" v-model="code">
             </section>
             <section class="login_hint">
               温馨提示：未注册硅谷外卖帐号的手机号，登录时将自动注册，且代表已同意
@@ -29,7 +29,7 @@
           <div :class="{on: !loginWay}">
             <section>
               <section class="login_message">
-                <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名">
+                <input type="tel" maxlength="11" placeholder="手机/邮箱/用户名" v-model="name">
               </section>
               <section class="login_verification">
                 <input type="text" maxlength="8" placeholder="密码" v-if="showPwd" v-model="pwd">
@@ -40,7 +40,7 @@
                 </div>
               </section>
               <section class="login_message">
-                <input type="text" maxlength="11" placeholder="验证码">
+                <input type="text" maxlength="11" placeholder="验证码" v-model="captcha">
                 <img class="get_verification" src="./images/captcha.svg" alt="captcha">
               </section>
             </section>
@@ -53,17 +53,25 @@
         <i class="iconfont icon-jiantou2"></i>
       </a>
     </div>
+    <AlertTip :alertText="alertText" v-show="alertShow" @closeTip="closeTip"/>
   </section>
 </template>
 
 <script>
+    import AlertTip from '../../components/AlertTip/AlertTip.vue'
     export default {
         data () {
             return {
                 loginWay: false, // true代表短信登陆, false代表密码
                 phone: '', // 手机号
+                code:'', // 短信验证码
+                name: '', // 用户名
+                pwd: '', // 密码
+                captcha: '', // 图形验证码
                 computeTime: 0, // 计时的时间
                 showPwd: false, // 是否显示密码
+                alertText: '', // 提示文本
+                alertShow: false, // 是否显示警告框
             }
         },
         computed: {
@@ -87,6 +95,55 @@
                     }, 1000)
                 }
             },
+            showAlert(alertText) {
+                this.alertShow = true
+                this.alertText = alertText
+            },
+            // 异步登陆
+            async login () {
+                // 前台表单验证
+                if(this.loginWay) {  // 短信登陆
+                    const {rightPhone, phone, code} = this
+                    if(!this.rightPhone) {
+                        // 手机号不正确
+                        this.showAlert('手机号不正确')
+                        return
+                    } else if(!/^\d{6}$/.test(code)) {
+                        // 验证必须是6位数字
+                        this.showAlert('验证必须是6位数字')
+                        return
+                    }
+                    // 发送ajax请求短信登陆
+                } else {// 密码登陆
+                    const {name, pwd, captcha} = this
+                    if(!this.name) {
+                        // 用户名必须指定
+                        this.showAlert('用户名必须指定')
+                        return
+                    } else if(!this.pwd) {
+                        // 密码必须指定
+                        this.showAlert('密码必须指定')
+                        return
+                    } else if(!this.captcha) {
+                        // 验证码必须指定
+                        this.showAlert('验证码必须指定')
+                        return
+                    }
+                    // 发送ajax请求密码登陆
+                }
+
+                // 停止计时
+
+                // 根据结果数据处理
+            },
+            // 关闭警告框
+            closeTip () {
+                this.alertShow = false
+                this.alertText = ''
+            },
+        },
+        components: {
+            AlertTip
         }
     }
 </script>
