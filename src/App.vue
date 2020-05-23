@@ -14,11 +14,12 @@
         async mounted(){
             // this.$store.dispatch('getAddress')
             this.getAddress()
+            this.getUserInfo()//自动登陆
           // const result = await reqFoodCategorys();
           // console.log(result)
         },
         methods: {
-            ...mapActions(['getAddress'])
+            ...mapActions(['getAddress', 'getUserInfo'])
         },
         components: {
             FooterGuide
