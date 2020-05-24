@@ -10,6 +10,7 @@ import VueLazyload from 'vue-lazyload'
 
 import './mock/mockServer' // 加载mockServer即可
 import loading from './common/imgs/loading.gif'
+import './fiters' // 加载过滤器
 
 Vue.use(VueLazyload, { // 内部自定义一个指令lazy
   loading
